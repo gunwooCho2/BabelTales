@@ -1,0 +1,34 @@
+.friend_container {
+  width: 200px;
+  max-height: 600px;
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  >.friend-item {
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    >.friend_status {
+      margin: 0 10px 0 10px;
+      height: 16px;
+      width: 16px;
+      border-radius: 8px;
+    }
+    >.friend_name {
+      font-family: 'Pretendard-Regular', serif;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  }
+  >.friend-item:hover {
+    background-color: #d0d8d5;
+  }
+}

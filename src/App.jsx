@@ -1,34 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import NavBar from "./components/nav/NavBar.jsx";
+import Main from "./components/main/Main.jsx";
+import { useState} from "react";
+import "./styles/App.scss"
+import NavMenu from "./components/nav/NavMenu.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [menu, setMenu] = useState(<></>);
+    const [tooltip, setTooltip] = useState(<></>);
+    const [navSideActive, setNavSideActive] = useState(false);
+
+    const createMenu = (e, component) => {
+        setTimeout(() => {
+            setMenu(component);
+        }, 0);
+    }
+    const createTooltip = (component) => {
+        setTooltip(component);
+    }
+
+    const clear = (e) => {
+        if (!e.target.closest(".nav-menu") ) {
+            setMenu(<></>);
+        }
+    }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="total" onClick={(e) => clear(e)}>
+          <NavBar createMenu={createMenu} createTooltip={createTooltip} setNavSideActive={setNavSideActive}/>
+          <Main/>
+          <div className="menu-container">
+              {menu}
+          </div>
+          <div className={`tooltip-container ${navSideActive ? "tooltip-container-side-active" : ""}`}>
+              {tooltip}
+          </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
   )
 }
 

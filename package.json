@@ -1,5 +1,5 @@
 {
-  "name": "babeltales",
+  "name": "babletables",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,8 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.7.9",
+    "lodash": "^4.17.21",
+    "open-color": "^1.9.1",
+    "prop-types": "^15.8.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.4.0",
+    "sass": "^1.83.4",
+    "styled-components": "^6.1.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

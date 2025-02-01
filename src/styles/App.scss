@@ -1,0 +1,27 @@
+@use "@/styles/util.scss" as util;
+
+.menu-container {
+  height: 100%;
+  width: 152px;
+  position: absolute;
+  left: 230px;
+  display: flex;
+  justify-content: center;
+}
+.tooltip-container {
+  height: 100%;
+  width: 100px;
+  position: absolute;
+  left: 230px;
+  @include util.flexCenter
+}
+
+.total {
+  @include util.flexCenter;
+  width: 100vw;
+  height: 100vh;
+}
+
+.tooltip-container-side-active {
+  left:50px
+}

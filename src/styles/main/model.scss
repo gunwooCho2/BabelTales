@@ -1,0 +1,55 @@
+@use "@/styles/util.scss" as util;
+
+.model_sentence {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px;
+}
+
+.model_word {
+  font-family: 'SUIT-Regular', serif;
+  font-size: 1.2rem;
+  padding: 3px;
+  cursor: pointer;
+  border-radius: 5px;
+  position: relative;
+  @include util.flexCenter;
+}
+
+.model_trans_btn {
+  background-color: #d0d8d5;
+  font-family: 'SUIT-Regular', serif;
+  @include util.flexCenter;
+  padding: 5px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 5px;
+  position: relative;
+}
+
+.model_trans_stc {
+  @include util.toolTip(120%, 0, 16px);
+}
+
+.model_trans_stc_active {
+  display: block;
+  opacity: 1;
+}
+
+.model_mean {
+  @include util.toolTip(120%, 0, 16px);
+}
+
+.model_mean_active {
+  display: block;
+  opacity: 1;
+}
+
+.model_trans_btn:hover {
+  background-color: #b1bab6;
+}
+
+.model_word:hover {
+  background-color: #dbece9;
+}

@@ -1,0 +1,18 @@
+
+.user_container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.user_sentence {
+  font-family: 'SUIT-Regular', serif;
+  background-color: #e5efea;
+  border-radius: 20px;
+  position: relative;
+  font-size: 1.2rem;
+  padding: 15px;
+  margin: 20px 0 20px 10px;
+  width: 60%;
+}
