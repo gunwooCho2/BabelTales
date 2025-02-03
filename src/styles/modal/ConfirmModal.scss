@@ -1,0 +1,35 @@
+
+
+.confirm-modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #3498db;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.modal-confirm-button {
+  background: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.modal-confirm-button:hover {
+  background: #2980b9;
+}

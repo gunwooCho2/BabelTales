@@ -3,6 +3,7 @@ import Main from "./components/main/Main.jsx";
 import {useContext, useState} from "react";
 import "./styles/App.scss"
 import {ModalContext} from "@/context/ModalContext.jsx";
+import {Route, Routes} from "react-router-dom";
 
 function App() {
     const [menu, setMenu] = useState(<></>);
@@ -29,8 +30,16 @@ function App() {
       <>
           <div className="total" onClick={(e) => clear(e)}>
               <NavBar createMenu={createMenu} createTooltip={createTooltip} setNavSideActive={setNavSideActive}/>
-              <Main/>
-              <div className="menu-container">
+              <Routes>
+                  <Route path="/" element={<Main/>} />
+              </Routes>
+              <Routes>
+                  <Route path="/t" element={<Main/>} />
+              </Routes>
+              <Routes>
+                  <Route path="/r" element={<Main/>} />
+              </Routes>
+              <div className={`menu-container ${navSideActive ? "menu-container-side-active" : ""}`}>
                   {menu}
               </div>
               <div className={`tooltip-container ${navSideActive ? "tooltip-container-side-active" : ""}`}>

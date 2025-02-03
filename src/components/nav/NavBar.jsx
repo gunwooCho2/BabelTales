@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import "@/styles/nav/nav.scss"
 import { CgPushChevronLeft, CgPushChevronRight } from "react-icons/cg";
 import { GiWhiteBook } from "react-icons/gi";
@@ -8,6 +8,10 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import {FaPencilAlt, FaTrash} from "react-icons/fa";
 import { GiStarfighter } from "react-icons/gi";
+import {useLocation, useNavigate} from "react-router-dom";
+import {ModalContext} from "@/context/ModalContext.jsx";
+import ConfirmModal from "@/components/modal/Confirm.jsx";
+import Modal from "@/components/Modal.jsx";
 
 const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     const [side, setSide] = useState(false);
@@ -132,17 +136,50 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     const scrollRef = useRef(null);
     const otherTaleRef = useRef(null);
     const [top, setTop] = useState(0);
-
-    const createMenuHandler = (e) => {
-        createMenu(e, <div className="nav-menu" style={{top: `${top + 10}px`}}>
-            <div className="nav-menu-item" style={{marginBottom: "0"}}>
+    const navigate = useNavigate();
+    const location = useLocation();
+    const root = location.pathname;
+    const otherMessages = [
+        {
+            key: "/r",
+            component: <div className="nav-menu-item" style={{marginBottom: "0"}} onClick={() => {
+                navigate("/r")
+                window.location.reload()
+            }}>
                 <FaPencilAlt className="nav-menu-item-icon"></FaPencilAlt>
                 <div className="nav-menu-item-text">릴레이 소설</div>
             </div>
-            <div className="nav-menu-item" style={{marginTop: "0"}}>
+        },
+        {
+            key: "/t",
+            component: <div className="nav-menu-item" style={{marginTop: "0"}} onClick={() => {
+                navigate("/t")
+                window.location.reload()
+            }}>
                 <GiStarfighter className="nav-menu-item-icon" style={{color: "red"}}></GiStarfighter>
                 <div className="nav-menu-item-text">TRPG</div>
             </div>
+        },
+        {
+            key: "/",
+            component: <div className="nav-menu-item" style={{marginBottom: "0"}} onClick={() => {
+                navigate("/")
+                window.location.reload()
+            }}>
+                <BiBook className="nav-menu-item-icon"></BiBook>
+                <div className="nav-menu-item-text">대화</div>
+            </div>
+        }
+    ]
+
+    const createMenuHandler = (e) => {
+        createMenu(e, <div className="nav-menu" style={{top: `${top + 10}px`}}>
+            {otherMessages
+                .filter(item => item.key !== root)
+                .map(item => (
+                        item.component
+                ))
+            }
         </div>);
     }
 
@@ -162,6 +199,18 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
         };
     }, [handleChildScroll, scrollRef])
 
+    const {modal, updateModal} = useContext(ModalContext);
+
+    const newTaleClickHandler = () => {
+        navigate(root)
+        if (root !== "/") {
+            updateModal(
+                <Modal>
+                    <ConfirmModal/>
+                </Modal>
+            )
+        }
+    }
     return (
         <nav className={side ? "nav-side-active" : ""} ref={scrollRef}>
             <div className="nav-header">
@@ -178,7 +227,7 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
                 </div>
             </div>
             <div className="newTale-box-container ">
-                <div className="newTale-box">
+                <div className="newTale-box" onClick={newTaleClickHandler}>
                     <BiBook className="newTale-icon" onMouseEnter={(e) => createToolTipHandler(e, "New Tale")} onMouseLeave={deleteToolTipHandler}></BiBook>
                     <div className="newTale-text">New tale</div>
                 </div>
