@@ -1,0 +1,175 @@
+@use "@/styles/util.scss" as util;
+
+.setting-modal {
+  width: 500px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  font-family: sans-serif;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+
+  .modal-header {
+    padding: 13px;
+    font-size: 22px;
+    background-color: #3498db;
+    color: #fff;
+    text-align: center;
+    font-family: 'Pretendard-Regular', serif;
+    font-weight: bold;
+  }
+
+  .modal-body {
+    width: 100%;
+    height: 248.4px;
+    display: flex;
+  }
+
+  .modal-nav {
+    flex: 150px 0 0;
+    background-color: #ffffff;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 7px 11px;
+      margin: 5px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      &:hover {
+        background-color: #f1f1f1;
+      }
+      &.active {
+        background-color: #ddd;
+      }
+      .nav-icon {
+        margin-right: 8px;
+      }
+      .nav-text {
+        font-family: 'Pretendard-Regular', serif;
+        margin-left: 8px;
+      }
+    }
+  }
+
+  .modal-content {
+    flex: 1;
+    @include util.flexCenter;
+    height: 100%;
+    position: relative;
+  }
+
+  .tab-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+
+    .btn {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    >.logout {
+      background-color: #3498db;
+      color: #fff;
+      &:hover {
+        background-color: #2e86c1;
+      }
+    }
+
+    >.allDelete {
+      background-color: #db3434;
+      color: #fff;
+      &:hover {
+        background-color: #c12e2e;
+      }
+    }
+
+    >.changeContainer {
+      width: 100%;
+      display: flex;
+
+      >.changeInput {
+        border: #ffffff 3px solid;
+        border-radius: 4px;
+        height: 35px;
+        box-sizing: border-box;
+        &:focus {
+        }
+      }
+
+      >.changeIcon {
+        @include util.flexCenter;
+        color: #3fdb34;
+        font-size: 35px;
+        cursor: pointer;
+        margin-left: 10px;
+        border-radius: 3px;
+      }
+    }
+
+    >.userIcon {
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      left: 20%;
+      height: 100px;
+      width: 100px;
+      border-radius: 50%;
+      border: #000000 3px solid;
+      margin-bottom: 10px;
+
+      >.changeUserIcon {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-size: 25px;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        @include util.flexCenter;
+        background-color: white;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .placeholder-icon {
+    width: 24px;
+    height: 24px;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+}
+
+.cancelMember {
+  background-color: #db3434;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: #fff;
+  &:hover {
+    background-color: #c12e2e;
+  }
+}
+
+.btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}

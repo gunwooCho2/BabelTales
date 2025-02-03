@@ -5,44 +5,54 @@ const Friend = () => {
     const [friends, setFriends] = React.useState([])
     const dummyData = [
         {
-            "friend_online": "online",
-            "friend_name": "Alice"
+            icon:null,
+            status: "online",
+            name: "Alice"
         },
         {
-            "friend_online": "offline",
-            "friend_name": "Bob"
+            icon:null,
+            status: "online",
+            name: "Bob"
         },
         {
-            "friend_online": "away",
-            "friend_name": "Charlie"
+            icon:null,
+            status: "online",
+            name: "Charlie"
         },
         {
-            "friend_online": "online",
-            "friend_name": "David"
+            icon:null,
+            status: "away",
+            name: "David"
         },
         {
-            "friend_online": "offline",
-            "friend_name": "Emma"
+            icon:null,
+            status: "away",
+            name: "Emma"
         },
         {
-            "friend_online": "away",
-            "friend_name": "Frank"
+            icon:null,
+            status: "away",
+            name: "Frank"
         },
         {
-            "friend_online": "online",
-            "friend_name": "Grace"
+            icon:null,
+            status: "offline",
+            name: "Grace"
         },
         {
-            "friend_online": "offline",
-            "friend_name": "Henry"
+            icon:null,
+            status: "offline",
+            name: "Henry"
         },
         {
-            "friend_online": "away",
-            "friend_name": "Ivy"
+            icon:null,
+            status: "offline",
+            name: "Ivy"
         },
         {
-            "friend_online": "online",
-            "friend_name": "Jack"
+            icon:null,
+            status: "offline",
+            name: "Jack"
         }
     ]
 
@@ -54,8 +64,13 @@ const Friend = () => {
         <div className="friend_container">
             {friends.map((friend, i) => (
                 <div key={i} className="friend-item">
-                    <div className="friend_status" style={{backgroundColor:friend.friend_online === "online" ? "green" : friend.friend_online === "offline" ? "gray" : "red"}}></div>
-                    <div className="friend_name">{friend.friend_name}</div>
+                    <div className="friend-icon" style={{
+                        backgroundImage: `url(${friend.icon != null ? friend.icon : "https://cdn-icons-png.flaticon.com/512/880/880594.png"})`
+                    }}>
+                        <div className="friend-status" style={{backgroundColor: `${
+                            friend.status === "online" ? "#54ff3c" : friend.status === "away" ? "#ff0000" : "#2b2b2b"}`}}/>
+                    </div>
+                    <div className="friend_name">{friend.name}</div>
                 </div>
             ))}
         </div>

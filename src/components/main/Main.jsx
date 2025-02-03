@@ -1,15 +1,21 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import "@/styles/main/main.scss"
+import "@/styles/Modal.scss"
 import ModelSentence from "./ModelSentence.jsx";
 import UserSentence from "./UserSentence.jsx";
 import { FaUserFriends } from "react-icons/fa";
 import {IoMdChatboxes, IoMdSettings} from "react-icons/io";
 import Friend from "./Friend.jsx";
+import Dictionary from "@/components/main/Dictionary.jsx";
+import {ModalContext} from "@/context/ModalContext.jsx";
+import Modal from "@/components/Modal.jsx";
+import SettingModal from "@/components/modal/SettingModal.jsx";
 
 const Main = () => {
     const [inputContainerHeight, setInputContainerHeight] = useState("100px");
     const [component, setComponent] = useState(<></>);
     const inputTextAreaRef = useRef(null);
+    const {modal, updateModal} = useContext(ModalContext);
     const dummyData = {
         model:true,
         sentence: "This is a dummy statement for React development. This is a dummy statement for React development.",
@@ -119,7 +125,7 @@ const Main = () => {
     return (
         <div className="mainContainer" onClick={(e) => clear(e)}>
             <div className="inputContainer" style={{height: inputContainerHeight}}>
-                <textarea className="input-textArea" placeholder="ask anything" ref={inputTextAreaRef} value={textValue}
+                <textarea className="input-textArea" placeholder="let me know your tale" ref={inputTextAreaRef} value={textValue}
                           onChange={inputValue} onKeyDown={inputKeyDown}></textarea>
             </div>
             <div ref={conversationContainer} className="conversationContainer">
@@ -134,11 +140,18 @@ const Main = () => {
                         setTimeout(() => {
                             setComponent(<Friend></Friend>)
                         }, 0)}}/>
-                    <IoMdChatboxes className="bookIcon"/>
-                    <IoMdSettings className="bookIcon"/>
+                    <IoMdChatboxes className="bookIcon" />
+                    <IoMdSettings className="bookIcon" onClick={() => {
+                        setTimeout(() => {
+                            setComponent(undefined)
+                            updateModal(<Modal>
+                                <SettingModal />
+                            </Modal>)
+                        }, 0)}}/>
                 </div>
                 {component}
             </div>
+            <Dictionary/>
         </div>
     );
 };

@@ -1,0 +1,82 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); // 어두운 오버레이 효과
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.profile-modal {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 400px;  // 원하는 크기에 맞게 조절
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  font-family: sans-serif;
+
+  .modal-header {
+    text-align: center;
+    margin-bottom: 20px;
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      color: #333;
+    }
+  }
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .profile-preview {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      border: 2px solid #3498db;
+    }
+
+    .upload-placeholder {
+      width: 150px;
+      height: 150px;
+      border: 2px dashed #3498db;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      color: #3498db;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .file-input {
+      margin-bottom: 20px;
+      border: 1px solid #3498db;
+      font-family: 'Pretendard-Regular', serif;
+    }
+
+    .confirm-button {
+      padding: 10px 20px;
+      background-color: #3498db;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
+  }
+}

@@ -1,0 +1,153 @@
+@use "@/styles/util.scss" as util;
+
+.dictionary_container {
+  position: absolute;
+  @include util.flexCenter;
+  font-size: 47px;
+  z-index: 1;
+
+  >.icon_container {
+    @include util.flexCenter;
+  }
+
+  >.dictionary_input_container {
+    >.dictionary_input {
+      display: none;
+    }
+  }
+  >.result_container {
+    display: none;
+  }
+}
+
+.dictionary_container_active {
+  z-index: 1;
+  position: absolute;
+  cursor: grab;
+  width: 250px;
+  background: #fff;
+  border-radius: 3px 3px 12px 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 0 20px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+
+  >.dictionary_bar {
+    width: 290px;
+    height: 30px;
+    margin-bottom: 20px;
+    background-color: #3498db;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+
+    >.bar_minimize {
+      right:10px;
+      position: relative;
+      height: 13px;
+      width: 13px;
+      border-radius: 50%;
+      background-color: #ff0000;
+      border: 5px solid #3498db;
+      cursor: pointer;
+    }
+  }
+
+  >.dictionary_input_container {
+    display: flex;
+    >.dictionary_input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+      transition: border 0.3s ease;
+      margin-bottom: 15px;
+    }
+
+    >.dictionary_input:focus {
+      border: 1px solid #3498db;
+    }
+
+    >.icon_container {
+      @include util.flexCenter;
+      margin-left: 10px;
+      font-size: 30px;
+      padding: 5px;
+      height: 30px;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+  }
+
+  >.result_container {
+    width: 100%;
+    max-width: 400px;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: auto;
+    max-height: 200px;
+  }
+
+  >.result_container thead {
+    background-color: #3498db;
+  }
+
+  >.result_container thead th {
+    padding: 8px 15px;
+    color: #fff;
+    font-size: 16px;
+  }
+
+  .result_container tbody {
+    display: table-row-group;
+    width: 100%;
+  }
+
+  .result_container tbody tr {
+    display: table-row;
+    vertical-align: inherit;
+    unicode-bidi: isolate;
+    width: 100%;
+    table-layout: fixed;
+    border-bottom: 1px solid #f2f2f2;
+    transition: background-color 0.2s ease;
+  }
+
+  .result_container tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  .result_container tbody td,
+  .result_container tbody th {
+    padding: 10px 15px;
+    font-size: 15px;
+    color: #333;
+  }
+
+  /* 별도 클래스 스타일 (필요시) */
+  .result_part {
+    font-family: 'Pretendard-Regular', serif;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+
+  .result_word {
+    font-family: 'Pretendard-Regular', serif;
+    font-weight: 400;
+    color: #555;
+    @include util.flexCenter
+  }
+}
+

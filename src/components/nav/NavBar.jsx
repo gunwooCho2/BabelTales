@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import "@/styles/nav/nav.scss"
 import { CgPushChevronLeft, CgPushChevronRight } from "react-icons/cg";
 import { GiWhiteBook } from "react-icons/gi";
@@ -6,6 +6,8 @@ import { BiBook } from "react-icons/bi";
 import NavItems from "./NavItems.jsx";
 import PropTypes from "prop-types";
 import axios from "axios";
+import {FaPencilAlt, FaTrash} from "react-icons/fa";
+import { GiStarfighter } from "react-icons/gi";
 
 const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     const [side, setSide] = useState(false);
@@ -116,6 +118,10 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     },[])
 
     const createToolTipHandler = (e, message) => {
+        if (side) createTooltip(<div className="toolTip" style={{top:`${e.target.getBoundingClientRect().y - 25}px`}}>{message}</div> )
+    }
+
+    const createToolTipSideLessHandler = (e, message) => {
         createTooltip(<div className="toolTip" style={{top:`${e.target.getBoundingClientRect().y - 25}px`}}>{message}</div> )
     }
 
@@ -124,6 +130,37 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     }
 
     const scrollRef = useRef(null);
+    const otherTaleRef = useRef(null);
+    const [top, setTop] = useState(0);
+
+    const createMenuHandler = (e) => {
+        createMenu(e, <div className="nav-menu" style={{top: `${top + 10}px`}}>
+            <div className="nav-menu-item" style={{marginBottom: "0"}}>
+                <FaPencilAlt className="nav-menu-item-icon"></FaPencilAlt>
+                <div className="nav-menu-item-text">릴레이 소설</div>
+            </div>
+            <div className="nav-menu-item" style={{marginTop: "0"}}>
+                <GiStarfighter className="nav-menu-item-icon" style={{color: "red"}}></GiStarfighter>
+                <div className="nav-menu-item-text">TRPG</div>
+            </div>
+        </div>);
+    }
+
+    const handleChildScroll = useCallback(() => {
+        setTop(otherTaleRef.current.getBoundingClientRect().y);
+    }, [otherTaleRef])
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.addEventListener("scroll", handleChildScroll);
+        }
+
+        return () => {
+            if (scrollRef.current) {
+                scrollRef.current.removeEventListener("scroll", handleChildScroll);
+            }
+        };
+    }, [handleChildScroll, scrollRef])
 
     return (
         <nav className={side ? "nav-side-active" : ""} ref={scrollRef}>
@@ -133,7 +170,7 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
                     <CgPushChevronLeft className="header-inActive-icon" onClick={() => {
                         setSide(true)
                         setNavSideActive(true)
-                    }} onMouseEnter={(e) => createToolTipHandler(e, "close menu")} onMouseLeave={deleteToolTipHandler}/>
+                    }} onMouseEnter={(e) => createToolTipSideLessHandler(e, "close menu")} onMouseLeave={deleteToolTipHandler}/>
                     <CgPushChevronRight className="header-active-icon" onClick={() => {
                         setSide(false)
                         setNavSideActive(false)
@@ -145,7 +182,7 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
                     <BiBook className="newTale-icon" onMouseEnter={(e) => createToolTipHandler(e, "New Tale")} onMouseLeave={deleteToolTipHandler}></BiBook>
                     <div className="newTale-text">New tale</div>
                 </div>
-                <div className="otherTale-box">
+                <div className="otherTale-box" onClick={createMenuHandler} ref={otherTaleRef}>
                     <GiWhiteBook className="otherTale-icon" onMouseEnter={(e) => createToolTipHandler(e, "Other Tale")} onMouseLeave={deleteToolTipHandler}></GiWhiteBook>
                     <div className="otherTale-text">Other tale</div>
                 </div>

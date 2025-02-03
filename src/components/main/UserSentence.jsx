@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import PropTypes from "prop-types";
-import "@/styles/main/model.scss"
+import "@/styles/main/user.scss"
 
 const UserSentence = ({item}) => {
     return (
