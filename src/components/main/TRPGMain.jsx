@@ -1,71 +1,104 @@
-import {useCallback, useContext, useEffect, useRef, useState} from 'react';
-import "@/styles/main/main.scss"
-import "@/styles/Modal.scss"
-import ModelSentence from "./ModelSentence.jsx";
-import UserSentence from "./UserSentence.jsx";
-import { FaUserFriends } from "react-icons/fa";
-import {IoMdChatboxes, IoMdSettings} from "react-icons/io";
-import Friend from "./Friend.jsx";
-import Dictionary from "@/components/main/Dictionary.jsx";
+import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {ModalContext} from "@/context/ModalContext.jsx";
+import ModelSentence from "@/components/main/ModelSentence.jsx";
+import UserSentence from "@/components/main/UserSentence.jsx";
+import {FaUserFriends} from "react-icons/fa";
+import Friend from "@/components/main/Friend.jsx";
+import {IoMdChatboxes, IoMdSettings} from "react-icons/io";
 import Modal from "@/components/Modal.jsx";
 import SettingModal from "@/components/modal/SettingModal.jsx";
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
-import {useLocation, useNavigate} from "react-router-dom";
+import Dictionary from "@/components/main/Dictionary.jsx";
+import TRPGMenu from "@/components/main/TRPGMenu.jsx";
 
-const Main = ({R}) => {
+const TRPGMain = () => {
     const [inputContainerHeight, setInputContainerHeight] = useState("100px");
     const [component, setComponent] = useState(<></>);
     const inputTextAreaRef = useRef(null);
     const {modal, updateModal} = useContext(ModalContext);
-    const [sentences, setSentences] = useState([]);
-    const [stompClient, setStompClient] = useState(null);
-    const [textValue, setTextValue] = useState("");
-    const { search } = useLocation();
-    const queryParams = new URLSearchParams(search);
-    const conversationNo = queryParams.get("t");
-    const navigate = useNavigate();
+    const dummyData = {
+        model:true,
+        profile:"",
+        sentence: "This is a dummy statement for React development. This is a dummy statement for React development.",
+        means: [
+            {
+                mean: "이것"
+            },
+            {
+                mean: "~은(는)"
+            },
+            {
+                mean: "하나의"
+            },
+            {
+                mean: "더미"
+            },
+            {
+                mean: "문장"
+            },
+            {
+                mean: "~을 위한"
+            },
+            {
+                mean: "리액트"
+            },
+            {
+                mean: "개발"
+            },
+            {
+                mean: "이것"
+            },
+            {
+                mean: "~은(는)"
+            },
+            {
+                mean: "하나의"
+            },
+            {
+                mean: "더미"
+            },
+            {
+                mean: "문장"
+            },
+            {
+                mean: "~을 위한"
+            },
+            {
+                mean: "리액트"
+            },
+            {
+                mean: "개발"
+            }
+        ],
+        translate_sentence:"이것은 리액트 개발용 더미 문장입니다."
+    }
+    const [sentences, setSentences] = useState([dummyData]);
 
     const inputValue = useCallback((e) => {
         inputTextAreaRef.current.style.height = "auto";
         const height = Math.min(inputTextAreaRef.current.scrollHeight, 200);
+        console.log(height);
         setInputContainerHeight(`${height + 52}px`);
         inputTextAreaRef.current.style.height = height + "px";
         setTextValue(e.target.value)
     }, [])
 
     const inputKeyDown = useCallback((e) => {
-        const inputValue = textValue.trim();
-        if (e.keyCode === 13 && inputValue !== "") {
+        if (e.keyCode === 13 && textValue.trim() !== "") {
             e.preventDefault();
-            const sendData = {
-                sentence: inputValue,
-                first: conversationNo === null,
-            }
-            stompClient.send(`/app/conversation/${conversationNo === null ? "-1" : conversationNo}`, {}, JSON.stringify(sendData));
-            setTextValue('');
+            console.log(textValue)
+            const inputValue = e.target.value;
+            setSentences((prevSentences) => [...prevSentences, {model:false, profile: "https://cdn-icons-png.flaticon.com/512/1237/1237165.png", sentence: inputValue, means: null, translate_sentence: null}]);
+            //  이후 서버에 데이터를 받아오는 로직으로 변경하여야함.
+            setSentences((prevSentences) => [...prevSentences, dummyData]);
+            setTextValue("");
         }
-    }, [stompClient, textValue])
+    }, [dummyData])
 
     const conversationContainer = useRef(null);
     const [hasScrollbar, setHasScrollbar] = useState(false);
 
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/ws');
-        const stomp = Stomp.over(socket);
-
-        stomp.connect({}, () => {
-            stomp.subscribe('/topic/sentence', (msg) => {
-                const receivedMessage = JSON.parse(msg.body);
-                console.log(receivedMessage);
-                setSentences(prev => [...prev, receivedMessage]);
-            });
-            setStompClient(stomp);
-        }, (error) => {
-            console.error('웹소켓 연결 실패:', error);
-            navigate("/login")
-        });
+        if (!conversationContainer.current) return;
 
         const observer = new MutationObserver(() => {
             const isScrollbarVisible =
@@ -79,12 +112,10 @@ const Main = ({R}) => {
             subtree: true,
         });
 
-        return () => {
-            observer.disconnect();
-            if (stomp) stomp.disconnect();
-        }
+        return () => observer.disconnect();
     }, []);
 
+    const [textValue, setTextValue] = useState("");
     const clear = (e) => {
         if (!e.target.closest(".friend_container")) {
             setComponent(<></>)
@@ -100,7 +131,7 @@ const Main = ({R}) => {
             <div ref={conversationContainer} className="conversationContainer">
                 <div className="outputContainer" style={{marginLeft: hasScrollbar ? "17px" : ""}}>
                     {sentences.map((item, i) => {
-                        if (item.role === "model") return <ModelSentence item={item} key={i} />;
+                        if (item.model) return <ModelSentence item={item} key={i} />;
                         else return <UserSentence item={item} key={i} />;
                     })}
                 </div>
@@ -121,8 +152,9 @@ const Main = ({R}) => {
                 {component}
             </div>
             <Dictionary/>
+            <TRPGMenu/>
         </div>
     );
 };
 
-export default Main;
+export default TRPGMain;

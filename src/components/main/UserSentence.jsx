@@ -5,6 +5,7 @@ import "@/styles/main/user.scss"
 const UserSentence = ({item}) => {
     return (
         <div className="user_container">
+            <div className="user_icon" style={{backgroundImage:`url(${item.profile})`}}></div>
             <div className="user_sentence">
                 {item.sentence}
             </div>
@@ -16,6 +17,7 @@ UserSentence.propTypes = {
     item : PropTypes.shape({
         model: PropTypes.bool.isRequired,
         sentence: PropTypes.string.isRequired,
+        profile: PropTypes.string,
         means: PropTypes.arrayOf(
             PropTypes.shape({
                 mean: PropTypes.string

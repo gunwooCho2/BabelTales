@@ -4,6 +4,8 @@ import {useContext, useState} from "react";
 import "./styles/App.scss"
 import {ModalContext} from "@/context/ModalContext.jsx";
 import {Route, Routes} from "react-router-dom";
+import TRPGMain from "@/components/main/TRPGMain.jsx";
+import Login from "@/components/Login.jsx";
 
 function App() {
     const [menu, setMenu] = useState(<></>);
@@ -26,27 +28,31 @@ function App() {
         }
     }
 
-  return (
-      <>
-          <div className="total" onClick={(e) => clear(e)}>
-              <NavBar createMenu={createMenu} createTooltip={createTooltip} setNavSideActive={setNavSideActive}/>
-              <Routes>
-                  <Route path="/" element={<Main/>} />
-              </Routes>
-              <Routes>
-                  <Route path="/t" element={<Main/>} />
-              </Routes>
-              <Routes>
-                  <Route path="/r" element={<Main/>} />
-              </Routes>
-              <div className={`menu-container ${navSideActive ? "menu-container-side-active" : ""}`}>
-                  {menu}
-              </div>
-              <div className={`tooltip-container ${navSideActive ? "tooltip-container-side-active" : ""}`}>
-                  {tooltip}
-              </div>
-          </div>
-          {modal}
+    const setMainPage = (component) => {
+        return <>
+            <div className="total" onClick={(e) => clear(e)}>
+                <NavBar createMenu={createMenu} createTooltip={createTooltip} setNavSideActive={setNavSideActive}/>
+                {component}
+                <div className={`menu-container ${navSideActive ? "menu-container-side-active" : ""}`}>
+                    {menu}
+                </div>
+                <div className={`tooltip-container ${navSideActive ? "tooltip-container-side-active" : ""}`}>
+                    {tooltip}
+                </div>
+            </div>
+            {modal}
+        </>
+    }
+
+    return (
+        <>
+            <Routes>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/register" element={<Login/>}/>
+                <Route path="/" element={setMainPage(<Main R={false}/>)}/>
+                <Route path="/t" element={setMainPage(<TRPGMain/>)}/>
+                <Route path="/r" element={setMainPage(<Main R={true}/>)}/>
+          </Routes>
       </>
   )
 }

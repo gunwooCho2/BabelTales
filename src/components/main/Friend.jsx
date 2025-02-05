@@ -1,74 +1,75 @@
 import React, {useEffect} from 'react';
 import "@/styles/main/friend.scss"
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 const Friend = () => {
     const [friends, setFriends] = React.useState([])
-    const dummyData = [
-        {
-            icon:null,
-            status: "online",
-            name: "Alice"
-        },
-        {
-            icon:null,
-            status: "online",
-            name: "Bob"
-        },
-        {
-            icon:null,
-            status: "online",
-            name: "Charlie"
-        },
-        {
-            icon:null,
-            status: "away",
-            name: "David"
-        },
-        {
-            icon:null,
-            status: "away",
-            name: "Emma"
-        },
-        {
-            icon:null,
-            status: "away",
-            name: "Frank"
-        },
-        {
-            icon:null,
-            status: "offline",
-            name: "Grace"
-        },
-        {
-            icon:null,
-            status: "offline",
-            name: "Henry"
-        },
-        {
-            icon:null,
-            status: "offline",
-            name: "Ivy"
-        },
-        {
-            icon:null,
-            status: "offline",
-            name: "Jack"
+    const [reqs, setReqs] = React.useState([])
+    const [receives, setReceives] = React.useState([])
+    const navigate = useNavigate();
+    const [findUser, setFindUser] = React.useState("")
+
+    const setFriendsHandler = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/friend', {withCredentials: true});
+            setFriends(response.data);
+        } catch (e) {
+            console.error(e);
         }
-    ]
+    }
+
+    const setReqsHandler = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/request', {withCredentials: true});
+            setReqs(response.data);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const setReceiveHandler = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/receive', {withCredentials: true});
+            setReceives(response.data);
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     useEffect(() => {
-        setFriends(() => dummyData);
-    }, []);
+        const fetchData = async () => {
+            try {
+                await setFriendsHandler()
+                await setReqsHandler()
+                await setReceiveHandler()
+            } catch (e) {
+                console.error(e);
+                navigate("/login")
+            }
+        }
+        fetchData();
+    }, [navigate]);
+
+    const friendReqHandler = async (event) => {
+        event.preventDefault();
+        try {
+            await axios.post(`http://localhost:8080/friend/request/${findUser}`, { withCredentials: true });
+            await setReceiveHandler()
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     return (
         <div className="friend_container">
             {friends.map((friend, i) => (
                 <div key={i} className="friend-item">
                     <div className="friend-icon" style={{
-                        backgroundImage: `url(${friend.icon != null ? friend.icon : "https://cdn-icons-png.flaticon.com/512/880/880594.png"})`
+                        backgroundImage: `url(${friend.profileURL})`
                     }}>
                         <div className="friend-status" style={{backgroundColor: `${
-                            friend.status === "online" ? "#54ff3c" : friend.status === "away" ? "#ff0000" : "#2b2b2b"}`}}/>
+                            friend.online ? "#54ff3c" : "#ff0000"}`}}/>
                     </div>
                     <div className="friend_name">{friend.name}</div>
                 </div>

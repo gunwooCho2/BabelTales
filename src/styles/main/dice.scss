@@ -1,0 +1,50 @@
+@use "@/styles/util.scss" as util;
+
+.icon {
+  @include util.flexCenter;
+  position: fixed;
+  font-size: 47px;
+  width: 50px;
+  height: 50px;
+  bottom: 70px;
+  right: 130px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.scene {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  @include util.flexCenter;
+  perspective: 800px;
+}
+
+.dice {
+  position: relative;
+  margin: 30px;
+  width: 100px;
+  height: 100px;
+  transform-style: preserve-3d;
+}
+
+.face {
+  border: 2px black solid;
+  @include util.flexCenter;
+  font-size: 124px;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: white;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+.face1 { transform: rotateY(0deg) translateZ(50px); }
+.face2 { transform: rotateY(90deg) translateZ(50px); }
+.face3 { transform: rotateX(90deg) translateZ(50px); }
+.face4 { transform: rotateX(-90deg) translateZ(50px); }
+.face5 { transform: rotateY(-90deg) translateZ(50px); }
+.face6 { transform: rotateY(180deg) translateZ(50px); }

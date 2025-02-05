@@ -6,7 +6,7 @@ import { BiBook } from "react-icons/bi";
 import NavItems from "./NavItems.jsx";
 import PropTypes from "prop-types";
 import axios from "axios";
-import {FaPencilAlt, FaTrash} from "react-icons/fa";
+import {FaPencilAlt} from "react-icons/fa";
 import { GiStarfighter } from "react-icons/gi";
 import {useLocation, useNavigate} from "react-router-dom";
 import {ModalContext} from "@/context/ModalContext.jsx";
@@ -16,110 +16,23 @@ import Modal from "@/components/Modal.jsx";
 const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     const [side, setSide] = useState(false);
     const [navItemsData, setNavItemsData] = useState([]);
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const response = await axios.get("http://localhost:8080/conversation")
-    //         setNavItemsData(response.data);
-    //     }
-    //     fetchData().catch((error) => {console.log(error)});
-    // },[])
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
-        setNavItemsData([
-            {
-                date: "오늘",
-                titles: [
-                    {
-                        title:"오늘의 날씨와 기분에 대한 긴 이야기",
-                        conversationNo:1
-                    },
-                    {
-                        title:"오늘 할 일 목록 - 예상보다 길어진 일정들",
-                        conversationNo:2
-                    },
-                ],
-            },
-            {
-                date: "어제",
-                titles: [
-                    {
-                        title:"어제의 추억과 그 속에서 배운 교훈들",
-                        conversationNo:3
-                    },
-                    {
-                        title:"어제 본 영화 리뷰: 감동적이었던 순간들",
-                        conversationNo:4
-                    },
-                ],
-            },
-            {
-                date: "지난 7일",
-                titles: [
-                    {
-                        title:"지난 7일간의 하이라이트: 시간이 빠르게 흐른 이유",
-                        conversationNo:5
-                    },
-                    {
-                        title:"주간 계획 요약: 성과와 문제점들에 대해",
-                        conversationNo:6
-                    },
-                ],
-            },
-            {
-                date: "지난 한 달",
-                titles: [
-                    {
-                        title:"지난 한 달 동안 나의 성장과 변화",
-                        conversationNo:7
-                    },
-                    {
-                        title:"월간 독서 리스트: 기억에 남는 책들",
-                        conversationNo:8
-                    },
-                ],
-            },
-            {
-                date: "2024년",
-                titles: [
-                    {
-                        title:"2024년 계획: 달성하고 싶은 목표들",
-                        conversationNo:9
-                    },
-                    {
-                        title:"올해 기억하고 싶은 특별한 이벤트들",
-                        conversationNo:10
-                    },
-                ],
-            },
-            {
-                date: "2023년",
-                titles: [
-                    {
-                        title:"2023년 회고: 의미 있는 순간들과 성취들",
-                        conversationNo:11
-                    },
-                    {
-                        title:"작년 한 해 동안의 가장 큰 배움",
-                        conversationNo:12
-                    },
-                ],
-            },
-            {
-                date: "2022년",
-                titles: [
-                    {
-                        title:"2023년 회고: 의미 있는 순간들과 성취들",
-                        conversationNo:11
-                    },
-                    {
-                        title:"작년 한 해 동안의 가장 큰 배움",
-                        conversationNo:12
-                    },
-                ],
-            },
-        ]);
-    },[])
+        const fetchData = async () => {
+            try {
+                let response;
+                if (location.pathname === "/") response = await axios.get('http://localhost:8080/conversation/', { withCredentials: true });
+                console.log(response.data);
+                setNavItemsData(response.data);
+            } catch (e) {
+                console.error(e);
+                navigate("/login");
+            }
+        };
+        fetchData();
+    }, []);
 
     const createToolTipHandler = (e, message) => {
         if (side) createTooltip(<div className="toolTip" style={{top:`${e.target.getBoundingClientRect().y - 25}px`}}>{message}</div> )
@@ -136,8 +49,6 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     const scrollRef = useRef(null);
     const otherTaleRef = useRef(null);
     const [top, setTop] = useState(0);
-    const navigate = useNavigate();
-    const location = useLocation();
     const root = location.pathname;
     const otherMessages = [
         {
@@ -236,9 +147,16 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
                     <div className="otherTale-text">Other tale</div>
                 </div>
             </div>
-            {navItemsData.map((item) => (
-                <NavItems key={item.date} date={item.date} titles={item.titles} createMenu={createMenu} scrollRef={scrollRef}/>
+            {navItemsData && navItemsData.length > 0 && navItemsData.map((item) => (
+                <NavItems
+                    key={item.date}
+                    date={item.date}
+                    titles={item.titles}
+                    createMenu={createMenu}
+                    scrollRef={scrollRef}
+                />
             ))}
+
         </nav>
     );
 };
