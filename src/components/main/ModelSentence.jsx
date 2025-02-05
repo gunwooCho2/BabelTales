@@ -51,7 +51,7 @@ ModelSentence.propTypes = {
         role: PropTypes.string.isRequired,
         sentenceNo: PropTypes.number.isRequired,
         model_trans: PropTypes.bool,
-        profile: PropTypes.string.isRequired,
+        profile: PropTypes.string,
         sentence: PropTypes.string.isRequired,
         means: PropTypes.arrayOf(
             PropTypes.shape({

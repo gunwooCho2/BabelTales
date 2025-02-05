@@ -56,7 +56,7 @@ const Main = ({R}) => {
         const stomp = Stomp.over(socket);
 
         stomp.connect({}, () => {
-            stomp.subscribe('/topic/sentence', (msg) => {
+            stomp.subscribe('/user/topic/sentence', (msg) => {
                 const receivedMessage = JSON.parse(msg.body);
                 console.log(receivedMessage);
                 setSentences(prev => [...prev, receivedMessage]);
