@@ -1,17 +1,32 @@
 import NavBar from "./components/nav/NavBar.jsx";
 import Main from "./components/main/Main.jsx";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import "./styles/App.scss"
 import {ModalContext} from "@/context/ModalContext.jsx";
 import {Route, Routes} from "react-router-dom";
 import TRPGMain from "@/components/main/TRPGMain.jsx";
 import Login from "@/components/Login.jsx";
+import {UserContext} from "@/context/UserContext.jsx";
+import axios from "axios";
 
 function App() {
     const [menu, setMenu] = useState(<></>);
     const [tooltip, setTooltip] = useState(<></>);
     const [navSideActive, setNavSideActive] = useState(false);
     const {modal, updateModal} = useContext(ModalContext);
+    const {userData, updateUser} = useContext(UserContext);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/user`, {withCredentials: true});
+                updateUser(() => response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchData();
+    }, [])
 
     const createMenu = (e, component) => {
         setTimeout(() => {

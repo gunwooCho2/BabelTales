@@ -12,12 +12,15 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {ModalContext} from "@/context/ModalContext.jsx";
 import ConfirmModal from "@/components/modal/Confirm.jsx";
 import Modal from "@/components/Modal.jsx";
+import {UpdateContext} from "@/context/UpdateContext.jsx";
 
 const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     const [side, setSide] = useState(false);
     const [navItemsData, setNavItemsData] = useState([]);
     const navigate = useNavigate();
     const location = useLocation();
+    const {modal, updateModal} = useContext(ModalContext);
+    const {reRender, updateComponent} = useContext(UpdateContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,15 +34,20 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
                 navigate("/login");
             }
         };
+
+        updateComponent(prev => ({
+            ...prev,
+            navbar:fetchData
+        }))
         fetchData();
     }, []);
 
     const createToolTipHandler = (e, message) => {
-        if (side) createTooltip(<div className="toolTip" style={{top:`${e.target.getBoundingClientRect().y - 25}px`}}>{message}</div> )
+        if (side) createTooltip(<div className="toolTip" style={{top:`${e.target.getBoundingClientRect().y - 370}px`}}>{message}</div> )
     }
 
     const createToolTipSideLessHandler = (e, message) => {
-        createTooltip(<div className="toolTip" style={{top:`${e.target.getBoundingClientRect().y - 25}px`}}>{message}</div> )
+        createTooltip(<div className="toolTip" style={{top:`${e.target.getBoundingClientRect().y - 370}px`}}>{message}</div> )
     }
 
     const deleteToolTipHandler = () => {
@@ -84,7 +92,7 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     ]
 
     const createMenuHandler = (e) => {
-        createMenu(e, <div className="nav-menu" style={{top: `${top + 10}px`}}>
+        createMenu(e, <div className="nav-menu" style={{top: `${top - 250}px`}}>
             {otherMessages
                 .filter(item => item.key !== root)
                 .map(item => (
@@ -109,8 +117,6 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
             }
         };
     }, [handleChildScroll, scrollRef])
-
-    const {modal, updateModal} = useContext(ModalContext);
 
     const newTaleClickHandler = () => {
         navigate(root)

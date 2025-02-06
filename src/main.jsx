@@ -4,12 +4,18 @@ import './index.css'
 import App from './App.jsx'
 import {ModalProvider} from "@/context/ModalContext.jsx";
 import { BrowserRouter } from 'react-router-dom';
+import {UpdateProvider} from "@/context/UpdateContext.jsx";
+import {UserProvider} from "@/context/UserContext.jsx";
 
 
 createRoot(document.getElementById('root')).render(
       <ModalProvider>
-          <BrowserRouter>
-              <App />
-          </BrowserRouter>
+          <UserProvider>
+              <UpdateProvider>
+                  <BrowserRouter>
+                      <App />
+                  </BrowserRouter>
+              </UpdateProvider>
+          </UserProvider>
       </ModalProvider>
 )

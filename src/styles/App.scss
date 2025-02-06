@@ -1,7 +1,6 @@
 @use "@/styles/util.scss" as util;
 
 .menu-container {
-  height: 100%;
   width: 152px;
   position: absolute;
   left: 230px;
@@ -10,14 +9,13 @@
 }
 
 .menu-container-side-active {
-  left:90px
+  left:90px;
 }
 .tooltip-container {
-  height: 100%;
   width: 100px;
   position: absolute;
   left: 230px;
-  @include util.flexCenter
+  @include util.flexCenter;
 }
 
 .total {
@@ -27,5 +25,5 @@
 }
 
 .tooltip-container-side-active {
-  left:50px
+  left:50px;
 }

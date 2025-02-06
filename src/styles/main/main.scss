@@ -25,6 +25,7 @@
       font-size: 18px;
       font-family: 'Pretendard-Regular', serif;
       box-sizing: border-box;
+      position: relative;
     }
 
     > .input-textArea:focus {
@@ -69,4 +70,24 @@
   }
 }
 
+.touchLessContainer {
+  @include util.flexCenter;
+  background-color: #daeae8;
+  position: absolute;
+  width: 712px;
+  height: 100px;
+  border-radius: 15px;
+  margin-bottom: 40px;
+  z-index: 9;
+}
 
+.loading{
+  animation: spin 1s linear infinite;
+  @include util.flexCenter;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

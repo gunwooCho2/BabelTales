@@ -13,12 +13,11 @@ const ModelSentence = ({item}) => {
     const mouseInActive = useCallback(() => {
         setMeanView(false)
     }, [])
-    const sentenceSplit = item.sentence.split(" ");
     const sentenceHandler = () => {
         if (item.model_trans) {
             return <>
                 {item.means.map((mean, i) => {
-                    return <ModelWord item={{word: sentenceSplit[i], mean: mean.mean}} key={i}/>
+                    return <ModelWord item={{word: mean.w, mean: mean.m}} key={i}/>
                 })}
                 <div className="model_trans_btn" onMouseDown={mouseActive} onMouseUp={mouseInActive}
                      onMouseLeave={mouseInActive}>
@@ -55,7 +54,8 @@ ModelSentence.propTypes = {
         sentence: PropTypes.string.isRequired,
         means: PropTypes.arrayOf(
             PropTypes.shape({
-                mean: PropTypes.string
+                w: PropTypes.string,
+                m: PropTypes.string,
             })
         ),
         translate_sentence: PropTypes.string

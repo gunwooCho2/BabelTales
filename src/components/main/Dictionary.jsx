@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import "@/styles/main/dictionary.scss"
 import { MdScreenSearchDesktop } from "react-icons/md";
+import axios from "axios";
 
 const Dictionary = () => {
     const [position, setPosition] = useState({
@@ -43,26 +44,33 @@ const Dictionary = () => {
     }
 
     window.addEventListener("mouseup", containerMouseUpHandler);
-    const [result, setResult] = useState({
-        test: []
-    })
+    const [result, setResult] = useState([])
 
-    const dummyData = {
-        test: [
-            { part: "동사", word: "test" },
-            { part: "명사", word: "test" },
-            { part: "형용사", word: "test" },
-            { part: "감탄사", word: "test" },
-            { part: "동사", word: "test" },
-            { part: "명사", word: "test" },
-            { part: "형용사", word: "test" },
-            { part: "감탄사", word: "test" },
-        ],
-    };
+    const fetchData = async () => {
+        const inputData = textValue.trim();
+        if (inputData === "") {
+            alert("텍스트가 비어있습니다.");
+            return;
+        }
+        console.log(inputData);
+        try {
+            const response = await axios.get("http://localhost:8080/util/dictionary", {
+                params: { word: inputData },
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+            });
+            console.log(response.data);
+            setResult(response.data);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
 
     const iconClickHandler = () => {
         if (isIcon) {
-            setResult(dummyData);
+            fetchData();
         }
         else setIsIcon(true);
     }
@@ -74,6 +82,12 @@ const Dictionary = () => {
             right: 60,
         })
     }
+
+    const inputTextAreaRef = useRef(null);
+    const [textValue, setTextValue] = useState("");
+    const inputValue = useCallback((e) => {
+        setTextValue(e.target.value)
+    }, [])
 
     return (
         <div className={isIcon ? "dictionary_container_active" : "dictionary_container"} style={{
@@ -88,7 +102,11 @@ const Dictionary = () => {
                 </div>
             </div>
             <div className="dictionary_input_container">
-                <input type="text" className="dictionary_input" placeholder="한글 단어 입력"></input>
+                <input type="text" className="dictionary_input" placeholder="한글 단어 입력"
+                       ref={inputTextAreaRef} value={textValue}
+                       onChange={inputValue}
+                       onMouseDown={(e) => e.stopPropagation()}
+                ></input>
                 <div className="icon_container" onClick={iconClickHandler}>
                     <MdScreenSearchDesktop style={{cursor: 'pointer'}} />
                 </div>
@@ -102,12 +120,15 @@ const Dictionary = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {result.test.map((item, index) => (
-                        <tr key={index}>
-                            <th scope="row" className="result_part">{item.part}</th>
-                            <td className="result_word">{item.word}</td>
-                        </tr>
-                    ))}
+                    {result.map((item, index) => {
+                        const part = item.p;
+                        return item.w.map((word, i) => (
+                            <tr key={`${index}-${i}`}>
+                                <th scope="row" className="result_part">{part}</th>
+                                <td className="result_word">{word}</td>
+                            </tr>
+                        ));
+                    })}
                     </tbody>
                 </table>
             </div>

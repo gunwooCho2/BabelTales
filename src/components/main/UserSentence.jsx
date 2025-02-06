@@ -15,8 +15,9 @@ const UserSentence = ({item}) => {
 
 UserSentence.propTypes = {
     item : PropTypes.shape({
-        model: PropTypes.bool.isRequired,
+        model: PropTypes.string,
         sentence: PropTypes.string.isRequired,
+        model_trans: PropTypes.bool.isRequired,
         profile: PropTypes.string,
         means: PropTypes.arrayOf(
             PropTypes.shape({

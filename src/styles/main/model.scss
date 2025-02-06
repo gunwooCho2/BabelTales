@@ -35,6 +35,11 @@
 
 .model_trans_stc {
   @include util.toolTip(120%, 0, 16px);
+  width: 500px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  transform: translateX(-50%);
 }
 
 .model_trans_stc_active {
