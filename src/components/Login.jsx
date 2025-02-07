@@ -52,7 +52,7 @@ const Login = () => {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:8080/user/register', data);
+            const response = await axios.post('http://10.100.201.77:8080/user/register', data);
             if (!response.data.userID && !response.data.userName) navigate('/login')
             else setDuplicateData(response.data);
         } catch(error) {
@@ -72,7 +72,7 @@ const Login = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:8080/user/login', data, { withCredentials: true });
+            await axios.post('http://10.100.201.77:8080/user/login', data, { withCredentials: true });
             navigate('/')
         } catch(error) {
             console.error(error);

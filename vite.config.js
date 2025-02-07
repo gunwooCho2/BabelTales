@@ -5,6 +5,10 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: '0.0.0.0', // 모든 네트워크 인터페이스에서 접근 가능하게 함
+    port: 3000,      // 원하는 포트 번호 (옵션)
+  },
   define: {
     global: 'window'
   },

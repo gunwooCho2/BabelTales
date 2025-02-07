@@ -5,18 +5,17 @@ import ModelSentence from "./ModelSentence.jsx";
 import UserSentence from "./UserSentence.jsx";
 import { FaUserFriends } from "react-icons/fa";
 import {IoMdChatboxes, IoMdSettings} from "react-icons/io";
-import Friend from "./Friend.jsx";
+import Friend from "./friend/Friend.jsx";
 import Dictionary from "@/components/main/Dictionary.jsx";
 import {ModalContext} from "@/context/ModalContext.jsx";
 import Modal from "@/components/Modal.jsx";
 import SettingModal from "@/components/modal/SettingModal.jsx";
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {UpdateContext} from "@/context/UpdateContext.jsx";
 import {UserContext} from "@/context/UserContext.jsx";
 import {AiOutlineLoading3Quarters} from "react-icons/ai";
+import {useWebSocket} from "@/context/WebSocketContext.jsx";
 
 const Main = ({R}) => {
     const [inputContainerHeight, setInputContainerHeight] = useState("100px");
@@ -24,16 +23,22 @@ const Main = ({R}) => {
     const inputTextAreaRef = useRef(null);
     const {modal, updateModal} = useContext(ModalContext);
     const [sentences, setSentences] = useState([]);
-    const [stompClient, setStompClient] = useState(null);
     const [textValue, setTextValue] = useState("");
     const { search } = useLocation();
     const queryParams = new URLSearchParams(search);
     const conversationNo = queryParams.get("t");
     const navigate = useNavigate();
-    const {reRender, updateComponent} = useContext(UpdateContext);
     const [createConv,setCreateConv] = useState(false);
     const {userData, updateUser} = useContext(UserContext);
     const [touchLess, isTouchLess] = useState(false);
+    const location = useLocation();
+    const createConvRef = useRef(createConv);
+    const stompClient = useWebSocket();
+
+    const updateCreateConv = (value) => {
+        setCreateConv(value);
+        createConvRef.current = value;
+    };
 
     const inputValue = useCallback((e) => {
         inputTextAreaRef.current.style.height = "auto";
@@ -43,7 +48,7 @@ const Main = ({R}) => {
         setTextValue(e.target.value)
     }, [])
 
-    const inputKeyDown = useCallback((e) => {
+    const inputKeyDown = (e) => {
         const inputValue = textValue.trim();
         if (e.keyCode === 13 && inputValue !== "") {
             e.preventDefault();
@@ -59,80 +64,66 @@ const Main = ({R}) => {
                 sentence: inputValue,
                 first: conversationNo === null,
             }
-            if (sendData.first) setCreateConv(true);
+            if (sendData.first) updateCreateConv(true);
             stompClient.send(`/app/conversation/${conversationNo === null ? "-1" : conversationNo}`, {}, JSON.stringify(sendData));
             setTextValue('');
         }
-    }, [stompClient, textValue])
+    }
 
     const conversationContainer = useRef(null);
     const [hasScrollbar, setHasScrollbar] = useState(false);
 
     useEffect(() => {
+        let subscription;
 
         const beginValue = async () => {
             try {
-                if (conversationNo !== null && conversationNo !== "") {
-                    const response = await axios.get(`http://localhost:8080/conversation/${conversationNo}`, {withCredentials: true});
-                    console.log(response.data);
+                if (conversationNo) {
+                    const response = await axios.get(`http://10.100.201.77:8080/conversation/${conversationNo}`, { withCredentials: true });
                     setSentences(response.data);
-                } else setSentences([])
+                } else {
+                    setSentences([]);
+                }
             } catch (e) {
                 console.error(e);
-                // navigate("/login");
-                alert("세션 만료?")
+                // alert("세션 만료?");
             }
-        }
+        };
 
         beginValue();
 
-        const socket = new SockJS('http://localhost:8080/ws');
-        const stomp = Stomp.over(socket);
-
-        stomp.connect({}, () => {
-            stomp.subscribe('/user/topic/sentence', (msg) => {
+        if (stompClient) {
+            subscription = stompClient.subscribe('/user/topic/sentence', (msg) => {
                 if (msg && msg.body) {
                     const receivedMessage = JSON.parse(msg.body);
                     console.log(receivedMessage);
                     inputSentence(receivedMessage);
                 } else {
-                    alert("API 서버 상태가 불안정합니다.")
+                    alert("API 서버 상태가 불안정합니다.");
                 }
             });
-            setStompClient(stomp);
-        }, (error) => {
-            console.error('웹소켓 연결 실패:', error);
-            navigate("/login")
-        });
-
-        const observer = new MutationObserver(() => {
-            const isScrollbarVisible =
-                conversationContainer.current.scrollHeight > conversationContainer.current.clientHeight;
-            setHasScrollbar(isScrollbarVisible);
-        });
-
-        observer.observe(conversationContainer.current, {
-            attributes: true,
-            childList: true,
-            subtree: true,
-        });
+        }
 
         return () => {
-            observer.disconnect();
-            if (stomp) stomp.disconnect();
-        }
-    }, [conversationNo]);
+            if (subscription) {
+                subscription.unsubscribe();
+            }
+        };
+    }, [stompClient, conversationNo]);
+
 
     const inputSentence = (newSentence) => {
         isTouchLess(false)
         setSentences(prev => {
             const index = prev.findIndex(item => item.sentenceNo === newSentence.sentenceNo)
-            if (index > -1) {
+            console.log("index", index, "modelTrans", newSentence.model_trans);
+            if (index > -1 && newSentence.model_trans) {
                 const updatedList = [...prev];
                 updatedList[index] = newSentence;
-                if (createConv) {
-                    reRender.navbar();
-                    setCreateConv(false);
+                if (createConvRef.current) {
+                    console.log(newSentence)
+                    queryParams.set("t", newSentence.conversationNo);
+                    navigate(`${location.pathname}?${queryParams.toString()}`, { replace: true })
                 }
                 return updatedList;
             } else {

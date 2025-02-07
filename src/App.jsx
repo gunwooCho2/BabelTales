@@ -19,7 +19,7 @@ function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/user`, {withCredentials: true});
+                const response = await axios.get(`http://10.100.201.77:8080/user`, {withCredentials: true});
                 updateUser(() => response.data);
             } catch (error) {
                 console.error(error);

@@ -1,15 +1,20 @@
 
 import "@/styles/nav/nav.scss"
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import axios from "axios";
+import {useLocation, useNavigate} from "react-router-dom";
+import {UpdateContext} from "@/context/UpdateContext.jsx";
 
 
 const NavMenu = ({conversationNo, menuRef, scrollRef, createMenu}) => {
     const [top, setTop] = useState(menuRef.current.getBoundingClientRect().y - 350);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const {reRender, updateComponent} = useContext(UpdateContext);
     const changeTitleHandler = async (title) => {
         try {
-            await axios.put(`http://localhost:8080/conversation/title/${conversationNo}`, title, {
+            await axios.put(`http://10.100.201.77:8080/conversation/title/${conversationNo}`, title, {
                 headers: {
                     'Content-Type': 'text/plain'
                 },
@@ -21,11 +26,21 @@ const NavMenu = ({conversationNo, menuRef, scrollRef, createMenu}) => {
         }
     }
 
+    const navReloading = (conversationNo) => {
+        const params = new URLSearchParams(location.search);
+        const tno = params.get("t");
+        if (tno === `${conversationNo}`) {
+            params.delete("t");
+        }
+        params.set("d", conversationNo);
+        navigate(`${location.pathname}?${params.toString()}`, { replace: true });
+    }
+
     const deleteTitleHandler = async (e) => {
         try {
-            await axios.delete(`http://localhost:8080/conversation/${conversationNo}`, {withCredentials: true});
-            alert("타이틀 삭제 완료.")
+            await axios.delete(`http://10.100.201.77:8080/conversation/${conversationNo}`, {withCredentials: true});
             createMenu(e, <></>)
+            navReloading(conversationNo)
         } catch (error) {
             console.log(error)
         }

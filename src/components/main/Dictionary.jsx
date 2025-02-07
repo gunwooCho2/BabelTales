@@ -54,7 +54,7 @@ const Dictionary = () => {
         }
         console.log(inputData);
         try {
-            const response = await axios.get("http://localhost:8080/util/dictionary", {
+            const response = await axios.get("http://10.100.201.77:8080/util/dictionary", {
                 params: { word: inputData },
                 headers: {
                     'Content-Type': 'text/plain'

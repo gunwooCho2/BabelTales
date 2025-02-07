@@ -3,7 +3,7 @@ import {ModalContext} from "@/context/ModalContext.jsx";
 import ModelSentence from "@/components/main/ModelSentence.jsx";
 import UserSentence from "@/components/main/UserSentence.jsx";
 import {FaUserFriends} from "react-icons/fa";
-import Friend from "@/components/main/Friend.jsx";
+import Friend from "@/components/main/friend/Friend.jsx";
 import {IoMdChatboxes, IoMdSettings} from "react-icons/io";
 import Modal from "@/components/Modal.jsx";
 import SettingModal from "@/components/modal/SettingModal.jsx";

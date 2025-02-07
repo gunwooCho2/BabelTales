@@ -4,7 +4,8 @@ export const UpdateContext = createContext()
 
 export const UpdateProvider = ({children}) => {
     const [reRender, setReRender] = useState({
-        navbar: () => {}
+        navbar: () => {},
+        main: () => {}
     });
     const updateComponent = (updater) => {
         setReRender(prev => updater(prev))

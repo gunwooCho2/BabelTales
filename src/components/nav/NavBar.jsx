@@ -21,13 +21,17 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     const location = useLocation();
     const {modal, updateModal} = useContext(ModalContext);
     const {reRender, updateComponent} = useContext(UpdateContext);
+    const { search } = useLocation();
+    const queryParams = new URLSearchParams(search);
+    const tno = queryParams.get("t");
+    const dno = queryParams.get("d");
+    const change = queryParams.get("change");
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 let response;
-                if (location.pathname === "/") response = await axios.get('http://localhost:8080/conversation/', { withCredentials: true });
-                console.log(response.data);
+                if (location.pathname === "/") response = await axios.get('http://10.100.201.77:8080/conversation/', { withCredentials: true });
                 setNavItemsData(response.data);
             } catch (e) {
                 console.error(e);
@@ -35,12 +39,8 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
             }
         };
 
-        updateComponent(prev => ({
-            ...prev,
-            navbar:fetchData
-        }))
         fetchData();
-    }, []);
+    }, [tno, dno]);
 
     const createToolTipHandler = (e, message) => {
         if (side) createTooltip(<div className="toolTip" style={{top:`${e.target.getBoundingClientRect().y - 370}px`}}>{message}</div> )

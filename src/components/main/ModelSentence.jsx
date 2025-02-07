@@ -51,7 +51,7 @@ ModelSentence.propTypes = {
         sentenceNo: PropTypes.number.isRequired,
         model_trans: PropTypes.bool,
         profile: PropTypes.string,
-        sentence: PropTypes.string.isRequired,
+        sentence: PropTypes.string,
         means: PropTypes.arrayOf(
             PropTypes.shape({
                 w: PropTypes.string,

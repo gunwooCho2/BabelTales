@@ -1,63 +1,98 @@
+@use "@/styles/util.scss" as util;
+
+@mixin friendItem() {
+  display: flex;
+  align-items: center;
+  width: 190px;
+  margin : 5px 0 0 10px;
+  position: relative;
+  >.name {
+    font-weight: bold;
+    font-size: 12px;
+    font-family: 'Pretendard-Regular', serif;
+  }
+  >.icon {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+  }
+  >.f_btn {
+    position: absolute;
+    right: 20px;
+    height: 20px;
+    width: 35px;
+    background-color: #3498db;
+    border-radius: 3px;
+    @include util.flexCenter;
+    color: white;
+    font-size: 12px;
+    font-family: 'Pretendard-Regular', serif;
+    cursor: pointer;
+  }
+  >.btn:hover {
+    background-color: #2d85c1;
+  }
+  >.btn:active {
+    background-color: #236695;
+  }
+}
+
 .friend_container {
   position: fixed;
   top: 70px;
   right: 20px;
   width: 200px;
+  min-height: 200px;
   max-height: 300px;
-  background-color: #fff;
   border-radius: 10px;
   overflow-y: auto;
   padding: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 
-  > .friend-item {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
+  >.searchUser {
+    width: 200px;
+    @include util.flexCenter;
+    flex-direction: column;
 
-    &:last-child {
-      margin-bottom: 0;
+    >.searchUser_result {
+      @include friendItem();
     }
+  }
 
-    &:hover {
-      background-color: #ecf6fd;
-      cursor: pointer;
+  >.searchUser input {
+    outline: none;
+    resize: none;
+    font-family: 'Pretendard-Regular', serif;
+    box-sizing: border-box;
+    min-height: 30px;
+    border: none;
+  }
+  >.searchUser input:focus {
+    border: solid 2px #aaaaaa;
+  }
+
+  >.friends_header {
+    font-family: 'Pretendard-Regular', serif;
+    margin: 10px 0 0 10px;
+  }
+
+  >.friend_item {
+    @include friendItem();
+    >.accept_btn {
+      right: 60px;
     }
-
-    > .friend-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      //background-color: #3498db;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: #fff;
-      margin-right: 10px;
-      flex-shrink: 0;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-
-      > .friend-status {
-        position: absolute;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        right: 0;
-        bottom: 0;
-      }
+    >.refusal_btn {
+      background-color: #ff0000;
     }
-
-    > .friend_name {
-      font-size: 14px;
-      color: #333;
-      font-weight: 500;
-      font-family: 'Pretendard-Regular', serif;
+    >.refusal_btn:hover {
+      background-color: #c60000;
+    }
+    >.refusal_btn:active {
+      background-color: #850000;
     }
   }
 }
