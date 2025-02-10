@@ -12,7 +12,7 @@ const Friend = () => {
 
     const getDataSkeleton = async (url, setData) => {
         try {
-            const response = await axios.get(`http://10.100.201.77:8080/${url}`, { withCredentials: true });
+            const response = await axios.get(`${import.meta.env.VITE_URL}:8080/${url}`, { withCredentials: true });
             setData(response.data);
         } catch (e) {
             console.error(e);
@@ -84,7 +84,7 @@ const Friend = () => {
         const value = e.target.value.trim();
         if (value !== "") {
             try {
-                const response = await axios.get(`http://10.100.201.77:8080/user/searchUser/${value}`, { withCredentials: true });
+                const response = await axios.get(`${import.meta.env.VITE_URL}/user/searchUser/${value}`, { withCredentials: true });
                 setSearchUsers(response.data);
             } catch (e) {
                 console.error(e);
@@ -99,27 +99,17 @@ const Friend = () => {
         }
     }, [stompClient]);
 
-    const deleteFriendHandler =  async (friendNo) => {
-        try {
-            await axios.delete(`http://10.100.201.77:8080/friend/delete/${friendNo}`, { withCredentials: true });
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    const requestResFriendHandler =  async (accept, userNo) => {
-        console.log("accept", accept);
-        console.log("userNo", userNo);
+    const receiveFriendHandler = useCallback((accept, userNo) => {
         const data = {
             userNo: userNo,
             accept: accept,
         }
-        try {
-            await axios.post(`http://10.100.201.77:8080/friend/receive`, data, { withCredentials: true });
-        } catch (e) {
-            console.error(e);
-        }
-    }
+        stompClient.send(`/app/friend/receive`, {}, JSON.stringify(data));
+    }, [stompClient])
+
+    const deleteFriendHandler = useCallback((friendNo) => {
+        stompClient.send(`/app/friend/delete/${friendNo}`, {}, "");
+    }, [stompClient])
 
     return (
         <div className="friend_container">
@@ -150,8 +140,8 @@ const Friend = () => {
                 <div key={i} className="friend_item">
                     <div className="icon" style={{backgroundImage: `url(${friend.profileURL})`}}></div>
                     <div className="name">{friend.name}</div>
-                    <div className="accept_btn f_btn" onClick={() => requestResFriendHandler(true, friend.friendNo)}>수락</div>
-                    <div className="refusal_btn f_btn" onClick={() => requestResFriendHandler(false, friend.friendNo)}>거절</div>
+                    <div className="accept_btn f_btn" onClick={() => receiveFriendHandler(true, friend.friendNo)}>수락</div>
+                    <div className="refusal_btn f_btn" onClick={() => receiveFriendHandler(false, friend.friendNo)}>거절</div>
                 </div>
             )}
             <div className="friends_header">

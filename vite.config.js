@@ -10,7 +10,8 @@ export default defineConfig({
     port: 3000,      // 원하는 포트 번호 (옵션)
   },
   define: {
-    global: 'window'
+    global: 'window',
+    _URL_: JSON.stringify('http://localhost:8080/'),
   },
   resolve: {
     alias: {

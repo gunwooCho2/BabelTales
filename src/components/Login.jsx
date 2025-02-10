@@ -52,7 +52,7 @@ const Login = () => {
             return;
         }
         try {
-            const response = await axios.post('http://10.100.201.77:8080/user/register', data);
+            const response = await axios.post(`${import.meta.env.VITE_URL}/user/register`, data);
             if (!response.data.userID && !response.data.userName) navigate('/login')
             else setDuplicateData(response.data);
         } catch(error) {
@@ -72,10 +72,12 @@ const Login = () => {
             return;
         }
         try {
-            await axios.post('http://10.100.201.77:8080/user/login', data, { withCredentials: true });
+            const response = await axios.post(`${import.meta.env.VITE_URL}/user/login`, data, { withCredentials: true });
             navigate('/')
+            window.location.reload();
         } catch(error) {
             console.error(error);
+            alert("login failed!")
         }
     }
 

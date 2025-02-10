@@ -9,7 +9,7 @@ export const WebSocketProvider = ({ children }) => {
     const [stompClient, setStompClient] = useState(null);
 
     useEffect(() => {
-        const socket = new SockJS('http://10.100.201.77:8080/ws');
+        const socket = new SockJS(`${import.meta.env.VITE_URL}/ws`);
         const stomp = Stomp.over(socket);
 
         stomp.connect({}, () => {

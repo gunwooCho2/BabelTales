@@ -3,11 +3,12 @@ import Main from "./components/main/Main.jsx";
 import {useContext, useEffect, useState} from "react";
 import "./styles/App.scss"
 import {ModalContext} from "@/context/ModalContext.jsx";
-import {Route, Routes} from "react-router-dom";
+import {Outlet, Route, Routes} from "react-router-dom";
 import TRPGMain from "@/components/main/TRPGMain.jsx";
 import Login from "@/components/Login.jsx";
 import {UserContext} from "@/context/UserContext.jsx";
 import axios from "axios";
+import {WebSocketProvider} from "@/context/WebSocketContext.jsx";
 
 function App() {
     const [menu, setMenu] = useState(<></>);
@@ -15,18 +16,6 @@ function App() {
     const [navSideActive, setNavSideActive] = useState(false);
     const {modal, updateModal} = useContext(ModalContext);
     const {userData, updateUser} = useContext(UserContext);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`http://10.100.201.77:8080/user`, {withCredentials: true});
-                updateUser(() => response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        fetchData();
-    }, [])
 
     const createMenu = (e, component) => {
         setTimeout(() => {
@@ -64,9 +53,9 @@ function App() {
             <Routes>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Login/>}/>
-                <Route path="/" element={setMainPage(<Main R={false}/>)}/>
-                <Route path="/t" element={setMainPage(<TRPGMain/>)}/>
-                <Route path="/r" element={setMainPage(<Main R={true}/>)}/>
+                <Route path="/" element={setMainPage(<Main R={false} />)} />
+                <Route path="/t" element={setMainPage(<TRPGMain />)} />
+                <Route path="/r" element={setMainPage(<Main R={true} />)} />
           </Routes>
       </>
   )

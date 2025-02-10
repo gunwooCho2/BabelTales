@@ -14,13 +14,13 @@ const NavMenu = ({conversationNo, menuRef, scrollRef, createMenu}) => {
     const {reRender, updateComponent} = useContext(UpdateContext);
     const changeTitleHandler = async (title) => {
         try {
-            await axios.put(`http://10.100.201.77:8080/conversation/title/${conversationNo}`, title, {
+            await axios.put(`${import.meta.env.VITE_URL}/conversation/title/${conversationNo}`, title, {
                 headers: {
                     'Content-Type': 'text/plain'
                 },
                 withCredentials: true
             })
-            alert("타이틀 변경 완료.")
+            navReloading(conversationNo)
         } catch (error) {
             console.log(error)
         }
@@ -38,7 +38,7 @@ const NavMenu = ({conversationNo, menuRef, scrollRef, createMenu}) => {
 
     const deleteTitleHandler = async (e) => {
         try {
-            await axios.delete(`http://10.100.201.77:8080/conversation/${conversationNo}`, {withCredentials: true});
+            await axios.delete(`${import.meta.env.VITE_URL}/conversation/${conversationNo}`, {withCredentials: true});
             createMenu(e, <></>)
             navReloading(conversationNo)
         } catch (error) {

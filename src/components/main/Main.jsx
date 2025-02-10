@@ -79,7 +79,7 @@ const Main = ({R}) => {
         const beginValue = async () => {
             try {
                 if (conversationNo) {
-                    const response = await axios.get(`http://10.100.201.77:8080/conversation/${conversationNo}`, { withCredentials: true });
+                    const response = await axios.get(`${import.meta.env.VITE_URL}/conversation/${conversationNo}`, { withCredentials: true });
                     setSentences(response.data);
                 } else {
                     setSentences([]);

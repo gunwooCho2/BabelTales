@@ -13,6 +13,7 @@ import {ModalContext} from "@/context/ModalContext.jsx";
 import ConfirmModal from "@/components/modal/Confirm.jsx";
 import Modal from "@/components/Modal.jsx";
 import {UpdateContext} from "@/context/UpdateContext.jsx";
+import {UserContext} from "@/context/UserContext.jsx";
 
 const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
     const [side, setSide] = useState(false);
@@ -31,7 +32,7 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
         const fetchData = async () => {
             try {
                 let response;
-                if (location.pathname === "/") response = await axios.get('http://10.100.201.77:8080/conversation/', { withCredentials: true });
+                if (location.pathname === "/") response = await axios.get(`${import.meta.env.VITE_URL}/conversation/`, { withCredentials: true });
                 setNavItemsData(response.data);
             } catch (e) {
                 console.error(e);
@@ -128,6 +129,21 @@ const NavBar = ({createMenu, createTooltip, setNavSideActive}) => {
             )
         }
     }
+
+    const {userData, updateUser} = useContext(UserContext);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_URL}/user`, {withCredentials: true});
+                updateUser(() => response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchData();
+    }, [])
+
     return (
         <nav className={side ? "nav-side-active" : ""} ref={scrollRef}>
             <div className="nav-header">
